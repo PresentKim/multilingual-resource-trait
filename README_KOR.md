@@ -20,6 +20,7 @@
 > // - resources/config/jpn.yml  
 > ```  
   
+  
 #### :sparkles: 예제: `config.yml`파일 다국어 지원하기  
 ```php  
 use kim\present\traits\multilingualresource\MultilingualResourceTrait;  
@@ -28,11 +29,22 @@ use kim\present\traits\multilingualresource\MultilingualResourceTrait;
 class Main extends PluginBase{  
     use MultilingualResourceTrait;  
 
-    public function onLoad() : void{  
-        $this->saveResourceByLanguage("config.yml", "config/%s.yml");  
+    public function saveDefaultConfig() : bool{  
+        return $this->saveResourceByLanguage("config.yml", "config/%s.yml");  
     }  
 }  
 ```  
+  
+> #### :sparkles: `MultilingualConfigTrait`를 사용  
+> ```php  
+> use kim\present\traits\multilingualresource\MultilingualConfigTrait;  
+> 
+> //config.yml 파일을 저장하는 예제 소스  
+> class Main extends PluginBase{  
+>     use MultilingualConfigTrait;  
+> }  
+> ```  
+  
   
 ## :zap: API  
 ```php  

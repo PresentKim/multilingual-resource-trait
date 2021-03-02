@@ -4,6 +4,7 @@
   </a>  
 </p>  
   
+  
 ## :zap: Usage  
 This library supports `MultilingualResourceTrait` which can be used in PluginBase.  
 Multilingual support of resource files is possible using this trait.  
@@ -20,19 +21,31 @@ Therefore, need to name the language resource file according to the established 
 > // - resources/config/jpn.yml  
 > ```  
   
-#### :sparkles: Support multilingual in `config.yml` file
+  
+#### :sparkles: Example: Support multilingual in `config.yml` file
 ````php  
 use kim\present\traits\multilingualresource\MultilingualResourceTrait;  
 
-//Example source for saving the config.yml file 
+//Example source for saving the config.yml file  
 class Main extends PluginBase{  
     use MultilingualResourceTrait;  
 
-    public function onLoad() : void{  
-        $this->saveResourceByLanguage("config.yml", "config/%s.yml");  
+    public function saveDefaultConfig() : bool{  
+        return $this->saveResourceByLanguage("config.yml", "config/%s.yml");  
     }  
 }  
 ````  
+  
+> #### :sparkles: Use `MultilingualConfigTrait`  
+> ```php  
+> use kim\present\traits\multilingualresource\MultilingualConfigTrait;  
+> 
+> //Example source for saving the config.yml file  
+> class Main extends PluginBase{  
+>     use MultilingualConfigTrait;  
+> }  
+> ```  
+  
   
 ## :zap: API  
 ````php  
