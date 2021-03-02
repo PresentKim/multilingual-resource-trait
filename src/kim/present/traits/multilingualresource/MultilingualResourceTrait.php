@@ -30,5 +30,77 @@ declare(strict_types=1);
 
 namespace kim\present\traits\multilingualresource;
 
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\AssumptionFailedError;
+
+use function dirname;
+use function fclose;
+use function file_exists;
+use function fopen;
+use function mkdir;
+use function preg_match;
+use function preg_quote;
+use function sprintf;
+use function stream_copy_to_stream;
+
+/** This trait override most methods in the {@link PluginBase} abstract class. */
 trait MultilingualResourceTrait{
+    /**
+     * It works like saveResource(), but automatically convert resource path according to server language.
+     *
+     * @param string $resourcePath resoucrce path string containing %s (it will replace to locale code)
+     *
+     * @see PluginBase::getResource()
+     */
+    public function saveResourceByLanguage(string $filename, string $resourcePath, bool $replace = false) : bool{
+        /** @var PluginBase $this */
+        $out = $this->getDataFolder() . $filename;
+        if(file_exists($out) && !$replace)
+            return false;
+
+        $resource = $this->getResourceByLanguage($resourcePath);
+        if($resource === null)
+            return false;
+
+        $dir = dirname($out);
+        if(!file_exists($dir) && !mkdir($dir, 0777, true))
+            return false;
+
+        $fp = fopen($out, "wb");
+        if($fp === false)
+            throw new AssumptionFailedError("fopen() should not fail with wb flags");
+
+        $ret = stream_copy_to_stream($resource, $fp) > 0;
+        fclose($fp);
+        fclose($resource);
+        return $ret;
+    }
+
+    /**
+     * It works like getResource(), but automatically convert resource path according to server language.
+     *
+     * @param string $path resoucrce path string containing %s (it will replace to locale code)
+     *
+     * @return resource|null Resource data, or null
+     *
+     * @see PluginBase::getResource()
+     */
+    public function getResourceByLanguage(string $path){
+        /** @var PluginBase $this */
+        $locale = $this->getServer()->getLanguage()->getLang();
+        $resource = $this->getResource(sprintf($path, $locale));
+        if($resource !== null)
+            return $resource;
+
+        //Use the first searched file as fallback
+        foreach($this->getResources() as $filePath => $info){
+            if(!preg_match("/^" . sprintf(preg_quote($path, '/'), "[a-zA-Z]{3}") . "$/", $filePath))
+                continue;
+
+            $resource = $this->getResource($filePath);
+            if($resource !== null)
+                return $resource;
+        }
+        return null;
+    }
 }
