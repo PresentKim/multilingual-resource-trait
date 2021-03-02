@@ -1,8 +1,8 @@
 ---
-name: Template
-antigen: blugin\template\virion
-version: 0.1.0
+name: multilingual-resource-trait
+antigen: kim\present\traits\multilingualresource
+version: 1.0.0
 api: 4.0.0
-author: AuthorName
-description: Template of Pocketmine-MP virion
+author: PresentKim
+description: Trait for multilingual resource file support
 ...
