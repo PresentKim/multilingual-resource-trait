@@ -1,0 +1,10 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Blugin/Template
+branches:
+  - main
+projects:
+  Template:
+    model: virion
+    type: library
+    lint:
+      phpstan: false
+...
