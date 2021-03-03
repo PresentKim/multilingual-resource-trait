@@ -2,7 +2,7 @@
 branches:
   - main
 projects:
-  multilingual-resource-trait_4.0.0:
+  multilingual-resource-trait:
     model: virion
     type: library
     lint:
